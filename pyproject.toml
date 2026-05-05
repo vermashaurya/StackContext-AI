@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stackcontextai"
+version = "0.1.0"
+description = "MVP developer context engine for GitHub repositories"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "chromadb>=0.5.5",
+  "openai>=1.30.0",
+  "python-dotenv>=1.0.1",
+  "requests>=2.31.0",
+]
+
+[project.scripts]
+stackcontextai = "stackcontextai.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["stackcontextai*"]
