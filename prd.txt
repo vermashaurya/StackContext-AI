@@ -1,0 +1,141 @@
+1. Problem Statement
+
+Developers lose critical context over time:
+
+* Why was this code written?
+* What decision led to this architecture?
+* What broke after a change?
+
+This context is scattered across:
+
+* Git commits
+* Pull requests
+* Issues
+* Slack/Discord discussions
+* Docs
+
+Result: slower onboarding, bad decisions, repeated mistakes.
+
+⸻
+
+2. Goal
+
+Build a system that:
+
+* Ingests dev knowledge sources
+* Connects them semantically
+* Answers context-rich questions grounded in real data
+
+⸻
+
+3. Target Users
+
+* Software engineers (primary)
+* New team members onboarding
+* Tech leads / reviewers
+
+⸻
+
+4. Core Features (MVP)
+
+4.1 Data Ingestion
+
+* GitHub repo:
+    * commits
+    * PRs
+    * issues
+* Markdown docs (README, internal docs)
+
+4.2 Indexing Pipeline
+
+* Chunking strategy (semantic, not naive)
+* Embeddings generation
+* Store in vector DB
+
+4.3 Query Interface
+
+* Ask natural language questions:
+    * “Why was auth refactored?”
+    * “What caused recent failures?”
+* Return:
+    * Answer
+    * Citations (commit, PR, issue links)
+
+4.4 Context Linking
+
+* Connect:
+    * commits ↔ PRs
+    * PRs ↔ issues
+* Build richer retrieval context
+
+⸻
+
+5. Non-Goals (for now)
+
+* No Slack integration (v2)
+* No real-time sync (batch is fine)
+* No fancy UI (CLI or minimal web UI is enough)
+
+⸻
+
+6. Success Metrics
+
+* Answer groundedness (low hallucination)
+* Retrieval relevance (top-k quality)
+* Latency (< 3–5s per query)
+* Dev usefulness (subjective but important)
+
+⸻
+
+7. Architecture Overview
+
+Pipeline:
+
+1. Ingestion Layer
+    * GitHub API
+    * File parser
+2. Processing Layer
+    * Clean + normalize text
+    * Chunking
+    * Metadata tagging
+3. Embedding Layer
+    * Generate embeddings
+4. Storage
+    * Vector DB (semantic search)
+    * Optional relational DB (metadata)
+5. Retrieval + QA
+    * Query → retrieve top-k chunks
+    * Rerank
+    * LLM generates answer with citations
+
+⸻
+
+8. Tech Stack (practical)
+
+* Backend: Python (FastAPI)
+* LLM:
+    * Start: OpenAI / Claude
+    * Later: local via Ollama
+* Embeddings: OpenAI / BGE / E5
+* Vector DB: Chroma (simple) or Weaviate
+* GitHub API for ingestion
+* CLI interface first
+
+⸻
+
+9. Risks & Challenges
+
+* Bad chunking → bad answers
+* Hallucination → must enforce citations
+* Context linking complexity
+* Token limits
+
+⸻
+
+10. Future Scope
+
+* Slack integration
+* IDE plugin
+* Graph-based context (knowledge graph)
+* Code-aware embeddings
+* Multi-repo support
